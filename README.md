@@ -1,212 +1,181 @@
-Part 1 — Probability Distributions (Bivariate Normal)
+# Formative 3 — Probability Distributions, Bayesian Probability & Gradient Descent
+  
+**Group 9**
+
+## Members
+| Member | Email | Roles / Tasks |
+|:--|:--|:--|
+| **Justine Umuhoza** | u.justine@alustudent.com | Part 1 Dataset & Analysis · Part 3 Iteration 2 |
+| **Sheryl Atieno Otieno** | s.otieno@alustudent.com | Part 4 Implementation · Part 3 Iteration 1 |
+| **Ulrich Rukazambuga** | u.rukazambu@alustudent.com | Part 1 Code & Plots · Part 3 Iteration 4 |
+| **Josue Byiringiro** | j.byiringir@alustudent.com | Part 2 Bayesian Model · Part 3 Iteration 3 |
+
+
+## Overview
+
+This project demonstrates applied understanding of:
+
+1. **Probability Distributions** — implementing the *Bivariate Normal Distribution* from scratch.  
+2. **Bayesian Probability** — applying Bayes’ Theorem to IMDb movie-review sentiment.  
+3. **Gradient Descent** — manual derivation and Python implementation for linear regression.
+
+All implementations follow the **DRY principle** via modular code in `src/`, and all plots / tables / outputs are generated reproducibly within Jupyter Notebooks.
+
+---
+
+## Repository Structure
+
+```
+Formative3-Group9/
+│
+├── data/
+│   ├── IMDB Dataset.csv
+│   └── measure1_smartphone_sens.csv
+│
+├── src/
+│   ├── bvn.py            
+│   ├── bayes_imdb.py     
+│   └── gradient_manual.py 
+│
+├── notebooks/
+│   ├── Part1_BVN.ipynb
+│   ├── part2_Bayes.ipynb
+│   ├── part4_gradient_descent.ipynb
+│   └── Formativ3_Group9_Notebook.ipynb   #  Merged submission notebook
+│
+├── outputs/
+│   ├── part1_bvn/        # Contour & 3D plots + PDF CSV
+│   ├── part2_bayes/      # Bayes tables + posterior chart
+│   └── part4_gradient/   # GD plots (m,b & MSE trends)
+│
+├── docs/
+│   ├── Part3_Manual_Calculations.pdf   # Handwritten derivation & iterations
+│   └── Contributions.pdf               # Team roles and evidence
+│
+├── requirements.txt
+└── README.md
+```
+
+##  Part 1 — Bivariate Normal Distribution
+
+**Goal:** Compute the *Bivariate Normal PDF* manually using two correlated variables from the smartphone-sensor dataset.
+
+**Key Steps**
+- Derived BVN formula from first principles (no `scipy.stats`).  
+- Calculated mean (μ), covariance (Σ), and correlation (ρ).  
+- Computed PDF for each data point and visualized on a grid.  
+- Produced **Contour** and **3D Surface** plots.
+
+**Deliverables**
+- `/outputs/part1_bvn/contour.png`  
+- `/outputs/part1_bvn/surface3d.png`  
+
+**Insight:**  
+ρ≈ 0 → nearly circular contour; higher ρ stretches the ellipse along its principal axis.
+
+---
+
+## Part 2 — Bayesian Probability (IMDb Reviews)
+
+**Goal:** Estimate how strongly specific keywords predict *positive sentiment* using **Bayes’ Theorem**.
+
+**Chosen Direction:**  P(Positive | keyword)  
+**Keywords**
+- Positive → `excellent`, `amazing`, `great`, `love`
+- Negative → `bad`, `boring`, `terrible`, `awful`
+
+**Outputs**
+| Keyword | Prior P(Positive) | Likelihood P(keyword|Positive) | Marginal P(keyword) | Posterior P(Positive|keyword) |
+|:--|:--:|:--:|:--:|:--:|
+| excellent | 0.5 | 0.1069 | 0.0668 | 0.7998 |
+| amazing  | 0.5 | 0.0638 | 0.0407 | 0.7843 |
+| great   | 0.5 | 0.3198 | 0.2375 | 0.6732 |
+| love    | 0.5 | 0.2149 | 0.1678 | 0.6403 |
+| bad     | 0.5 | 0.1137 | 0.2280 | 0.2493 |
+| boring  | 0.5 | 0.0235 | 0.0588 | 0.2001 |
+| terrible | 0.5 | 0.0146 | 0.0510 | 0.1435 |
+| awful   | 0.5 | 0.0108 | 0.0547 | 0.0990 |
+
+**Deliverables**
+- `/outputs/part2_bayes/bayes_table.csv`
+- `/outputs/part2_bayes/posterior_bar.png`
 
-Objective: Using a relevant dataset sourced online, compute the probability density values for each data point using the bivariate normal distribution formula. Implement this from scratch without using any statistical libraries in Python.
+**Interpretation:**  
+Positive keywords yield high posteriors (≈ 0.64–0.80); negative ones low (≈ 0.10–0.25).  
+Confirms Bayes’ Theorem captures sentiment direction using simple frequency probabilities.
 
-Requirements:
 
-Implement the bivariate normal PDF manually.
+## Part 3 & 4 — Gradient Descent (Manual + Code)
 
-Use only numpy, pandas, and matplotlib for numerical operations and visualisation.
+**Objective:** Fit a line \(y = mx + b\) via gradient descent.
 
-Visualise results using:
+### Part 3 — Manual Computation
+- Initial m₀ = –1, b₀ = 1, α = 0.1, data = {(1, 3), (3, 6)}.  
+- Derived ∂J/∂m and ∂J/∂b using chain rule.  
+- Performed 4 iterations (manually – 1 per member).
 
-Contour Plot — show PDF levels.
+| Iter | m | b | MSE (J) |
+|:--:|:--:|:--:|:--:|
+| 1 | 1.700 | 2.100 | 1.040 |
+| 2 | 1.260 | 1.900 | 0.064 |
+| 3 | 1.340 | 1.916 | 0.0348 |
+| 4 | 1.3336 | 1.8968 | 0.0318 |
 
-3D Plot — show surface of PDF.
+**Trend:**  
+MSE drops each iteration, parameters move toward optimum (m*, b*) ≈ (1.5, 1.5).  
+Stable learning rate ensures smooth convergence.
 
-Formula Reminder: 
-𝑓
-(
-𝑥
-)
-=
-1
-2
-𝜋
-∣
-Σ
-∣
-exp
-⁡
-(
-−
-1
-2
-(
-𝑥
-−
-𝜇
-)
-𝑇
-Σ
-−
-1
-(
-𝑥
-−
-𝜇
-)
-)
-f(x)=
-2π
-∣Σ∣
-	​
+See details → [`docs/F3_Group9_Part3_Manual_Calculation.pdf`](docs/F3_Group9_Part3_Manual_Calculation.pdf)
 
-1
-	​
 
-exp(−
-2
-1
-	​
+### Part 4 — Python Implementation (+ SciPy Validation)
+- Explicit loop showing each update of m and b.  
+- Separate plots for:
+  - Parameters (m, b) vs iteration  
+  - Error (MSE) vs iteration  
+- Verified with `scipy.optimize.minimize` (BFGS) → converged to (1.5, 1.5).
 
-(x−μ)
-T
-Σ
-−1
-(x−μ))
+**Deliverables**
+- `/outputs/part4_gradient/params_over_time.png`
+- `/outputs/part4_gradient/mse_over_time.png`
 
 
-Deliverables:
+##  Collaboration & Integrity
+- Work divided by sections (Parts 1–4) + peer review.  
+- Functions modularized in `src/` (imported into notebooks).  
+- All code original and explainable by each member.  
+- Academic Integrity Policy observed throughout.
 
-part1_bivariate_pdf.py or notebook equivalent.
+ Full details → [`docs/contributions.pdf`](docs/contributions.pdf)
 
-Contour and 3D plots saved as PNG files.
 
-CSV file with PDF values for each data point.
+## Running the Project
 
-Academic Integrity Disclaimer: This assignment is meant to assess your understanding and reasoning. You may use AI tools only to clarify concepts or check your logic, not to generate complete solutions or code.
+### Clone & Set Up
+```bash
+git clone https://github.com/<your-username>/Formative3-Group9.git
+cd Formative3-Group9
+pip install -r requirements.txt
+jupyter notebook notebooks/Formative3_Final.ipynb
+```
 
-Part 2 — Bayesian Probability (IMDb Movie Reviews)
+### Requirements
+```
+numpy
+pandas
+matplotlib
+scipy
+tabulate
+jupyter
+nbformat
+```
 
-Objective: Use the IMDb Movie Reviews Dataset to compute posterior probabilities for selected sentiment keywords using Bayes’ Theorem.
 
-Steps:
+## Learning Reflection
+- Understood how parameters (μ, Σ, ρ) shape joint distributions.  
+- Practiced Bayesian reasoning on real text data without ML libraries.  
+- Derived and implemented gradient descent mathematically and in code.  
+- Strengthened skills in modular coding, visualization, and collaborative version control.
 
-Choose 2–4 positive keywords and 2–4 negative keywords.
-
-Decide whether to calculate P(Positive | keyword) or P(Negative | keyword) — do not compute both.
-
-Compute and present:
-
-Prior: P(Positive)
-
-Likelihood: P(keyword | Positive)
-
-Marginal: P(keyword)
-
-Posterior: P(Positive | keyword)
-
-Implement Bayes’ theorem using basic Python operations only (no ML libraries).
-
-Deliverables:
-
-A small Markdown/CSV table showing computed probabilities for each keyword.
-
-A clear explanation of your method and keyword reasoning.
-
-Academic Integrity Disclaimer: Use AI tools only to clarify logic or confirm understanding, not to generate full answers or code.
-
-Part 3 — Gradient Descent Manual Calculation
-
-Objective: Manually compute three updates of gradient descent for parameters m and b in a simple linear regression model.
-
-Given:
-
-Linear equation: 
-𝑦
-=
-𝑚
-𝑥
-+
-𝑏
-y=mx+b
-
-
-Initial values: 
-𝑚
-0
-,
-𝑏
-0
-m
-0
-	​
-
-,b
-0
-	​
-
-
-
-
-Learning rate: 
-𝛼
-α
-
-
-Data points: (x, y) pairs provided by the instructor.
-
-Tasks:
-
-Compute predictions 
-𝑦
-^
-y
-^
-	​
-
- using current 
-𝑚
-m and 
-𝑏
-b.
-
-Derive gradients of MSE cost function with respect to 
-𝑚
-m and 
-𝑏
-b.
-
-Update 
-𝑚
-m and 
-𝑏
-b iteratively using gradient descent.
-
-Each member performs at least one update.
-
-Show all steps and intermediate results.
-
-Deliverables:
-
-Manual or handwritten PDF showing calculations.
-
-Explanation of whether parameters are moving toward reducing the error.
-
-Academic Integrity Disclaimer: Do not use AI-generated calculations; understand and perform all mathematical steps yourself.
-
-Part 4 — Gradient Descent in Code
-
-Objective: Convert the manual gradient descent process into Python code using SciPy (if necessary) and visualise the results.
-
-Tasks:
-
-Implement the gradient descent algorithm explicitly (show each iteration clearly).
-
-Compute updated values of m, b, and error across iterations.
-
-Visualise:
-
-Plot 1: m & b vs iteration.
-
-Plot 2: Error vs iteration.
-
-Save results to CSV (iteration, m, b, mse).
-
-Deliverables:
-
-part4_gradient_descent.py or notebook equivalent.
-Plots of parameter evolution and error trend.
-
-Academic Integrity Disclaimer: This part measures your Python implementation skills. Use AI only for concept clarification, not to write full code solutions.
+> **Academic Integrity Disclaimer:**  
+> This work is entirely original to Group 9. AI tools were used only for concept clarification and format consistency — not to generate final solutions or code. All members can individually explain every step of the submission.
