@@ -177,5 +177,3 @@ nbformat
 - Derived and implemented gradient descent mathematically and in code.  
 - Strengthened skills in modular coding, visualization, and collaborative version control.
 
-> **Academic Integrity Disclaimer:**  
-> This work is entirely original to Group 9. AI tools were used only for concept clarification and format consistency — not to generate final solutions or code. All members can individually explain every step of the submission.
